@@ -1,9 +1,4 @@
-# Conventional Commit Messages 
-
-See how [a minor change](#examples) to your commit message style can make a difference. 
-
-> [!TIP]
-> Take a look at **[git-conventional-commits](https://github.com/qoomon/git-conventional-commits)** , a CLI util to ensure these conventions, determine version and generate changelogs
+# Conventional Commit Messages
 
 ## Commit Message Formats
 
@@ -184,6 +179,13 @@ The `footer` should contain any information about **Breaking Changes** and is al
 * ⚠ make `.git/hooks/pre-receive` executable (unix: `chmod +x '.git/hooks/pre-receive'`)
 
 </details>
+
+## Commit Message Checker
+
+See how [a minor change](#examples) to your commit message style can make a difference. 
+
+> [!TIP]
+> Take a look at **[git-conventional-commits](https://github.com/qoomon/git-conventional-commits)** , a CLI util to ensure these conventions, determine version and generate changelogs
 
 -----
 ## References
