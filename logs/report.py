@@ -29,7 +29,7 @@ def settings(script_path):
         )
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
-        logger.setLevel(logging.INFO)
+        logger.setLevel(logging.DEBUG)
 
         # Optional: Disable propagation to prevent duplicate logs in parent loggers
         logger.propagate = False
