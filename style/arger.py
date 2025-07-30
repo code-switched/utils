@@ -9,9 +9,7 @@ It defines:
 """
 
 import re
-import sys
 import argparse
-from gettext import gettext
 from typing import Optional
 
 # ANSI colour codes
@@ -82,45 +80,3 @@ class ColourHelpFormatter(argparse.HelpFormatter):
             coloured_value = _colourise(value, COLOUR_DICT["YELLOW"])
             help_text = help_text.replace(match.group(0), f"(default: {coloured_value})")
         return help_text
-
-
-class ColoredArgParser(argparse.ArgumentParser):
-    """ArgumentParser with coloured help/usage/error output."""
-
-    colour_dict = COLOUR_DICT  # preserve attribute name used elsewhere
-
-    def __init__(self, *args, **kwargs):
-        # Default to our colour help formatter if caller didn't specify one
-        kwargs.setdefault("formatter_class", ColourHelpFormatter)
-        super().__init__(*args, **kwargs)
-
-    # The default ArgumentParser implementations of print_help/usage already
-    # call the formatter, so we just pass-through here to keep compatibility
-    def print_usage(self, file=None):  # type: ignore[override]
-        if file is None:
-            file = sys.stdout
-        usage = self.format_usage()
-        usage = usage.replace('usage:', _colourise('usage:', COLOUR_DICT['RED']), 1)
-        self._print_message(usage, file)
-
-    def print_help(self, file=None):  # type: ignore[override]
-        if file is None:
-            file = sys.stdout
-        self._print_message(self.format_help(), file)
-
-    def _print_message(self, message: str, file=None):  # type: ignore[override]
-        if message:
-            if file is None:
-                file = sys.stderr
-            file.write(message)
-
-    # Ensure error and exit messages are coloured red
-    def exit(self, status: int = 0, message: Optional[str] = None):  # type: ignore[override]
-        if message:
-            self._print_message(_colourise(message, COLOUR_DICT["RED"]), sys.stderr)
-        sys.exit(status)
-
-    def error(self, message):  # type: ignore[override]
-        self.print_usage(sys.stderr)
-        args = {"prog": self.prog, "message": message}
-        self.exit(2, gettext("%(prog)s: error: %(message)s\n") % args)
