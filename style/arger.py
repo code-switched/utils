@@ -57,7 +57,7 @@ class ColourHelpFormatter(argparse.HelpFormatter):
             return super()._format_action_invocation(action)
 
         # Colour each option flag
-        parts = [_colourise(flag, Color.GREY) for flag in action.option_strings]
+        parts = [_colourise(flag, Color.CYAN) for flag in action.option_strings]
 
         # Append metavar if the option expects an argument
         if action.nargs != 0:
@@ -69,7 +69,7 @@ class ColourHelpFormatter(argparse.HelpFormatter):
         # Let the base class build whatever text it wants…
         text = super()._format_args(action, default_metavar)
         # …then wrap it in colour
-        return _colourise(text, Color.CYAN)
+        return _colourise(text, Color.GREY)
 
     # Colour default values in help text
     def _get_help_string(self, action: argparse.Action) -> str:  # noqa: N802
