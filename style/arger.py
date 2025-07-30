@@ -30,11 +30,11 @@ class Color(str, Enum):
     LILAC   = "38;5;141"
 
 
-def _colourise(text: str, colour_code: Optional[str]) -> str:
+def _colourise(text: str, colour_code: Optional[Color]) -> str:
     """Return *text* wrapped in ANSI colour sequence if *colour_code* given."""
     if colour_code is None:
         return text
-    return f"\x1b[{colour_code}m{text}\x1b[0m"
+    return f"\x1b[{colour_code.value}m{text}\x1b[0m"
 
 
 class ColourHelpFormatter(argparse.HelpFormatter):
