@@ -1,31 +1,33 @@
 """This module provides coloured output support for argparse.
 
 It defines:
-- COLOUR_DICT: plain (non-bold) ANSI colour codes
+- Color: Enum of plain ANSI color codes
 - ColourHelpFormatter: HelpFormatter that injects colour into usage, section
   headings and option strings
-- ColoredArgParser: ArgumentParser that defaults to using the coloured
-  formatter and prints coloured errors/usage.
+- _colourise: helper that wraps text in ANSI escape sequences
+
 """
 
 import re
 import argparse
+from enum import Enum
 from typing import Optional
 
-# ANSI colour codes
-COLOUR_DICT = {
-    "RED": "31",
-    "GREEN": "32",
-    "YELLOW": "33",
-    "BLUE": "34",
-    "MAGENTA": "35",
-    "CYAN": "36",
-    "WHITE": "37",
-    "GREY": "90",
-    "SAGE":  "38;5;108",
-    "ROSE":  "38;5;167",
-    "LILAC": "38;5;141",
-}
+
+# ANSI color codes
+class Color(str, Enum):
+    """ANSI color codes."""
+    RED     = "31"
+    GREEN   = "32"
+    YELLOW  = "33"
+    BLUE    = "34"
+    MAGENTA = "35"
+    CYAN    = "36"
+    WHITE   = "37"
+    GREY    = "90"
+    SAGE    = "38;5;108"
+    ROSE    = "38;5;167"
+    LILAC   = "38;5;141"
 
 
 def _colourise(text: str, colour_code: Optional[str]) -> str:
@@ -40,12 +42,12 @@ class ColourHelpFormatter(argparse.HelpFormatter):
 
     def start_section(self, heading: str) -> None:  # type: ignore[override]
         # Section headings such as "optional arguments:" or "positional arguments:"
-        coloured_heading = _colourise(heading, COLOUR_DICT["GREEN"])
+        coloured_heading = _colourise(heading, Color.GREEN)
         super().start_section(coloured_heading)
 
     def add_usage(self, usage, actions, groups, prefix=None):
         if prefix is None:
-            prefix = _colourise('usage:', COLOUR_DICT['GREEN']) + ' '
+            prefix = _colourise('usage:', Color.GREEN) + ' '
         super().add_usage(usage, actions, groups, prefix)
 
     # Colour option strings ("-m", "--model")
@@ -55,7 +57,7 @@ class ColourHelpFormatter(argparse.HelpFormatter):
             return super()._format_action_invocation(action)
 
         # Colour each option flag
-        parts = [_colourise(flag, COLOUR_DICT["CYAN"]) for flag in action.option_strings]
+        parts = [_colourise(flag, Color.CYAN) for flag in action.option_strings]
 
         # Append metavar if the option expects an argument
         if action.nargs != 0:
@@ -67,7 +69,7 @@ class ColourHelpFormatter(argparse.HelpFormatter):
         # Let the base class build whatever text it wants…
         text = super()._format_args(action, default_metavar)
         # …then wrap it in colour
-        return _colourise(text, COLOUR_DICT["GREY"])
+        return _colourise(text, Color.GREY)
 
     # Colour default values in help text
     def _get_help_string(self, action: argparse.Action) -> str:  # noqa: N802
@@ -77,6 +79,6 @@ class ColourHelpFormatter(argparse.HelpFormatter):
         match = re.search(r"\(default: ([^)]+)\)", help_text)
         if match:
             value = match.group(1)
-            coloured_value = _colourise(value, COLOUR_DICT["YELLOW"])
+            coloured_value = _colourise(value, Color.YELLOW)
             help_text = help_text.replace(match.group(0), f"(default: {coloured_value})")
         return help_text

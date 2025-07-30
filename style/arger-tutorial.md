@@ -34,23 +34,24 @@ That is the only change required.
 | Metavars `MODEL`, `FILE`, …           | grey   | `_format_args` |
 | Default values `(default: …)`         | yellow | `_get_help_string` |
 
-These defaults come from one shared map:
+These defaults live in the `Color` enumeration:
 
 ```python
-COLOUR_DICT = {
-    "RED":     "31",
-    "GREEN":   "32",
-    "YELLOW":  "33",
-    "BLUE":    "34",
-    "MAGENTA": "35",
-    "CYAN":    "36",
-    "WHITE":   "37",
+from enum import Enum
+
+class Color(str, Enum):
+    RED     = "31"
+    GREEN   = "32"
+    YELLOW  = "33"
+    BLUE    = "34"
+    MAGENTA = "35"
+    CYAN    = "36"
+    WHITE   = "37"
 
     # 256-colour palette examples
-    "SAGE":  "38;5;108",
-    "ROSE":  "38;5;167",
-    "LILAC": "38;5;141",
-}
+    SAGE    = "38;5;108"
+    ROSE    = "38;5;167"
+    LILAC   = "38;5;141"
 ```
 Adjust any value to suit your theme.
 
@@ -84,8 +85,10 @@ All subsequent `add_argument()` calls remain unchanged.
 3. Reference it in the formatter:
 
 ```python
-COLOUR_DICT["META"] = "38;5;108"  # pastel green
-metavar = _colourise(metavar, COLOUR_DICT["META"])
+class ExtendedColor(Color):
+    META = "38;5;108"  # pastel green
+
+metavar = _colourise(metavar, ExtendedColor.META)
 ```
 
 ---
