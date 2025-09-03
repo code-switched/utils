@@ -51,7 +51,7 @@ class ColourHelpFormatter(argparse.HelpFormatter):
         super().add_usage(usage, actions, groups, prefix)
 
     # Colour option strings ("-m", "--model")
-    def _format_action_invocation(self, action: argparse.Action) -> str:  # noqa: N802
+    def _format_action_invocation(self, action: argparse.Action) -> str:
         # Positional arguments – keep default behaviour
         if not action.option_strings:
             return super()._format_action_invocation(action)
