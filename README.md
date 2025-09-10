@@ -18,11 +18,10 @@ Perfect for bootstrapping new Python projects or enhancing existing ones with pr
 - [🖥️ Command Line Interface](#command-line-interface-cli)  
 - [📋 Cross-Platform Clipboard](#cross-platform-clipboard-clip)
 - [📊 Logging System](#logging-system-logs)
-- [📈 Progress Tracking](#progress-tracking-progress)
+- [📈 Progress Tracking](#progress-tracking-status)
 - [🎨 Styling & Formatting](#styling--formatting-style)
 - [🖥️ System Information](#system-information-sys)
 - [🔄 Version Control](#version-control-vcs)
-- [🧹 Development Cleanup](#development-cleanup-clean)
 - [🚀 Getting Started](#getting-started)
 - [🎨 Design Principles](#design-principles)
 - [📚 Tutorials](#tutorials)
@@ -102,12 +101,12 @@ logger = report.settings(__file__)
 logger.info("Application started")
 ```
 
-### 📈 Progress Tracking (`progress/`)
+### 📈 Progress Tracking (`status/`)
 **Session management and git workflow helpers**
-- [`truncate.py`](progress/truncate.py) - Git diff truncation utility
-- [`create-diffs.md`](progress/create-diffs.md) - Session diff creation guide
-- [`start-session.md`](progress/start-session.md) - Session workflow
-- [`end-session.md`](progress/end-session.md) - Session summary guide
+- [`truncate.py`](status/truncate.py) - Git diff truncation utility
+- [`create-diffs.md`](status/create-diffs.md) - Session diff creation guide
+- [`start-session.md`](status/start-session.md) - Session workflow
+- [`end-session.md`](status/end-session.md) - Session summary guide
 
 **Features:**
 - Large git diff truncation (useful for .har files, large JSON)
@@ -116,7 +115,7 @@ logger.info("Application started")
 
 **Quick Start:**
 ```bash
-python progress/truncate.py session.diff session_clean.diff --ext .har --lines 10
+python status/truncate.py session.diff session_trunc.diff --ext .har --lines 10
 ```
 
 ### 🎨 Styling & Formatting (`style/`)
@@ -157,20 +156,6 @@ print(f"Processing: {ansi.cyan}filename.txt{ansi.reset}")
 - Conventional commit standards with examples
 - Git hook scripts for commit validation
 - Comprehensive PR template
-
-### 🧹 Development Cleanup (`clean/`)
-**Project maintenance utilities**
-- [`new.py`](clean/new.py) - Remove development artifacts
-
-**Features:**
-- Recursive `__pycache__` directory removal
-- Log file cleanup with pattern matching
-- Safe error handling with detailed logging
-
-**Quick Start:**
-```python
-python clean/new.py  # Clean entire project
-```
 
 ## 🚀 Getting Started
 
@@ -254,7 +239,7 @@ Each module includes detailed tutorials:
 - [`cfg/tutorial.md`](cfg/tutorial.md) - Configuration system setup
 - [`logs/tutorial.md`](logs/tutorial.md) - Logging patterns and best practices  
 - [`style/tutorial.md`](style/tutorial.md) - CLI styling and color usage
-- [`progress/create-diffs.md`](progress/create-diffs.md) - Session management
+- [`status/create-diffs.md`](status/create-diffs.md) - Session management
 - [`vcs/commits.md`](vcs/commits.md) - Git commit conventions
 
 ## 🤖 For Coding Assistants
