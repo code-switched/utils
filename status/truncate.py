@@ -158,12 +158,23 @@ def truncate_diff(
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:  # noqa: ANN401
-    p = argparse.ArgumentParser(description="Truncate large diff sections for specific file extensions.")
+    p = argparse.ArgumentParser(
+        description="Truncate large diff sections for specific file extensions."
+    )
     p.add_argument("input", help="Path to the original git diff file or '-' for stdin")
     p.add_argument("output", nargs="?", help="Path for the truncated diff (default: stdout)")
-    p.add_argument("--ext", "-e", action="append", default=[".har"], dest="exts", help="File extension(s) to target, e.g. -e .har -e .zip (default: .har)")
-    p.add_argument("--lines", "-n", type=int, default=10, help="Number of lines to keep at start and end (default: 10)")
-    p.add_argument("--inplace", "-i", action="store_true", help="Overwrite the input file in-place instead of writing to OUTPUT")
+    p.add_argument(
+        "--ext", "-e", action="append", default=[".har"], dest="exts",
+        help="File extension(s) to target, e.g. -e .har -e .zip (default: .har)"
+    )
+    p.add_argument(
+        "--lines", "-n", type=int, default=10,
+        help="Number of lines to keep at start and end (default: 10)"
+    )
+    p.add_argument(
+        "--inplace", "-i", action="store_true",
+        help="Overwrite the input file in-place instead of writing to OUTPUT"
+    )
     return p.parse_args(argv)
 
 
@@ -175,9 +186,8 @@ def main(argv: list[str] | None = None) -> None:
     ns = _parse_args(argv)
 
     input_fp = sys.stdin if ns.input == "-" else ns.input
-    output_path = (
-        ns.input if ns.inplace else ns.output or "-"
-    )  # if inplace, write back to same file
+    # if inplace, write back to same file
+    output_path = (ns.input if ns.inplace else ns.output or "-")
 
     if output_path == "-":
         output_fp = sys.stdout
