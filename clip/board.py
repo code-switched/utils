@@ -308,7 +308,10 @@ def init_dev_clipboard_clipboard():
         """Copies text to /dev/clipboard on Cygwin."""
         text = _PYTHON_STR_TYPE(text) # Converts non-str values to str.
         if text == '':
-            warnings.warn('Clipboard cannot copy a blank string to the clipboard on Cygwin. This is effectively a no-op.')
+            warnings.warn(
+                'Clipboard cannot copy a blank string to the clipboard on Cygwin. '
+                'This is effectively a no-op.'
+            )
         if '\r' in text:
             warnings.warn('Clipboard cannot handle \\r characters on Cygwin.')
 
@@ -338,8 +341,16 @@ def init_no_clipboard():
         def __call__(self, *args, **kwargs):
             additionalInfo = ''
             if sys.platform == 'linux':
-                additionalInfo = '\nOn Linux, you can run `sudo apt-get install xclip` or `sudo apt-get install xselect` to install a copy/paste mechanism.'
-            raise ClipboardException('Clipboard could not find a copy/paste mechanism for your system. For more information, please visit https://clipboard.readthedocs.io/en/latest/index.html#not-implemented-error' + additionalInfo)
+                additionalInfo = (
+                    '\nOn Linux, you can run `sudo apt-get install xclip` or '
+                    '`sudo apt-get install xselect` to install a copy/paste mechanism.'
+                )
+            raise ClipboardException(
+                'Clipboard could not find a copy/paste mechanism for your system. '
+                'For more information, please visit '
+                'https://clipboard.readthedocs.io/en/latest/index.html#not-implemented-error' + 
+                additionalInfo
+            )
 
         def __bool__(self):
             return False
@@ -366,7 +377,6 @@ class CheckedCall(object):
     def __setattr__(self, key, value):
         """Sets attributes on the wrapped function."""
         setattr(self.f, key, value)
-
 
 def init_windows_clipboard():
     """Initializes clipboard functions for Windows using ctypes.
@@ -492,7 +502,9 @@ def init_windows_clipboard():
                                              count * sizeof(c_wchar))
                     locked_handle = safeGlobalLock(handle)
 
-                    ctypes.memmove(c_wchar_p(locked_handle), c_wchar_p(text), count * sizeof(c_wchar))
+                    ctypes.memmove(
+                        c_wchar_p(locked_handle), c_wchar_p(text), count * sizeof(c_wchar)
+                    )
 
                     safeGlobalUnlock(handle)
                     safeSetClipboardData(CF_UNICODETEXT, handle)
@@ -514,7 +526,6 @@ def init_windows_clipboard():
 
     return copy_windows, paste_windows
 
-
 def init_wsl_clipboard():
     """Initializes clipboard functions for Windows Subsystem for Linux (WSL).
 
@@ -533,11 +544,14 @@ def init_wsl_clipboard():
 
     def paste_wsl():
         """Pastes text from the clipboard in WSL using PowerShell `Get-Clipboard`."""
-        ps_script = '[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes((Get-Clipboard -Raw)))'
+        ps_script = (
+            '[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes((Get-Clipboard -Raw)))'
+        )
 
         # '-noprofile' speeds up load time
-        p = subprocess.Popen(['powershell.exe', '-noprofile', '-command', ps_script],
-                             stdout=subprocess.PIPE,
+        p = subprocess.Popen(
+            ['powershell.exe', '-noprofile', '-command', ps_script],
+            stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE,
                              close_fds=True)
         stdout, stderr = p.communicate()
@@ -562,14 +576,18 @@ def determine_clipboard():
     accordingly.
     """
 
-    global Foundation, AppKit # These are needed as init_osx_pyobjc_clipboard uses them from the module level after this function imports them.
+    # These are needed as init_osx_pyobjc_clipboard uses them from the module level
+    # after this function imports them.
+    global Foundation, AppKit
 
     # Setup for the CYGWIN platform:
-    if 'cygwin' in platform.system().lower(): # Cygwin has a variety of values returned by platform.system(), such as 'CYGWIN_NT-6.1'
+    # Cygwin has a variety of values returned by platform.system(), such as 'CYGWIN_NT-6.1'
+    if 'cygwin' in platform.system().lower():
         # FIXME: clipboard currently does not support Cygwin,
         # see https://github.com/asweigart/clipboard/issues/55
         if os.path.exists('/dev/clipboard'):
-            warnings.warn('Clipboard\'s support for Cygwin is not perfect, see https://github.com/asweigart/clipboard/issues/55')
+            warnings.warn('Clipboard\'s support for Cygwin is not perfect, '
+                          'see https://github.com/asweigart/clipboard/issues/55')
             return init_dev_clipboard_clipboard()
 
     # Setup for the WINDOWS platform:
@@ -593,7 +611,8 @@ def determine_clipboard():
 
     # Setup for the LINUX platform:
 
-    if os.getenv("WAYLAND_DISPLAY") and _executable_exists("wl-copy")  and _executable_exists("wl-paste"):
+    if (os.getenv("WAYLAND_DISPLAY") and 
+        _executable_exists("wl-copy") and _executable_exists("wl-paste")):
         return init_wl_clipboard()
 
     # `import PyQt4` sys.exit()s if DISPLAY is not in the environment.
@@ -626,7 +645,6 @@ def determine_clipboard():
 
     return init_no_clipboard()
 
-
 def set_clipboard(clipboard):
     """Explicitly sets the clipboard mechanism.
 
@@ -655,11 +673,12 @@ def set_clipboard(clipboard):
     }
 
     if clipboard not in clipboard_types:
-        raise ValueError('Argument must be one of %s' % (', '.join([repr(_) for _ in clipboard_types.keys()])))
+        raise ValueError(
+            'Argument must be one of %s' % (', '.join([repr(_) for _ in clipboard_types.keys()]))
+        )
 
     # Sets clipboard's copy() and paste() functions:
     copy, paste = clipboard_types[clipboard]()
-
 
 def lazy_load_stub_copy(text):
     """A stub for copy() that loads the real function on first call.
@@ -678,7 +697,6 @@ def lazy_load_stub_copy(text):
     copy, paste = determine_clipboard()
     return copy(text)
 
-
 def lazy_load_stub_paste():
     """A stub for paste() that loads the real function on first call.
 
@@ -692,7 +710,6 @@ def lazy_load_stub_paste():
     global copy, paste
     copy, paste = determine_clipboard()
     return paste()
-
 
 def is_available():
     """Checks if a functional clipboard mechanism is available.
