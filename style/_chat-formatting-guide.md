@@ -18,7 +18,7 @@ _Tutorial for AI Assistants - Converting Default Exports to Enhanced Format_
 
 ### The Problem with Default Chat Exports
 
-Default chat exports from tools like Cursor are functional but have poor navigation and unclear conversation flow:
+Default chat exports from tools like VS Code or Cursor are functional but have poor navigation and unclear conversation flow:
 
 ```markdown
 # Some Chat Topic
