@@ -182,6 +182,7 @@ conversation_sections = [
 - Keep topic descriptions concise (< 50 characters)
 - Use clean anchor links: `#section-name` (no emojis, lowercase, hyphens)
 - Show primary speaker for each section
+- Each navigation entry should represent a distinct conversational turn (a user's request and the assistant's complete response to it), not sub-sections within a single response.
 
 ### Step 3: Transform Headers and Content
 
@@ -306,7 +307,7 @@ New question...
 
 ### Conversation Turn Philosophy
 
-**Turn Definition**: End after assistant completes their response, before user speaks again.
+**Turn Definition**: A "turn" encompasses a distinct exchange where a user makes a request or asks a question, and the assistant provides a complete, cohesive response. A single turn ends after the assistant completes their response, before the user speaks again. Even if an assistant's response contains multiple sub-sections (e.g., critical gaps, questions, recommendations), if it's part of a continuous reply to a single user prompt, it should typically be represented as one logical section in the navigation and main content.
 
 ```markdown
 ## Problem Solving
@@ -331,7 +332,7 @@ Thanks! But now I have...
 
 **Why this works:**
 - Shows complete thought cycles
-- Natural conversation boundaries  
+- Natural conversation boundaries
 - Easy to scan for specific exchanges
 
 ---
@@ -452,10 +453,10 @@ More answers...
 
 ### ❌ Pitfall 6: Improper Section Breaks
 
-A new section should only begin after a user's turn. Placing a section header right before an assistant's response breaks the natural conversational flow.
+A new section should only begin after a complete conversational turn (user's request + assistant's full response). Placing a new section header or double horizontal rule within a single continuous assistant's response breaks the natural conversational flow and creates misleading navigation entries.
 
 ```markdown
-<!-- WRONG - Breaks a single turn into two sections -->
+<!-- WRONG - Breaks a single turn into two sections or adds unnecessary sections within a single response -->
 
 ---
 ---
@@ -471,7 +472,7 @@ Can you help me?
 ### 🤖 **Assistant**
 Yes, here is the plan...
 
-<!-- RIGHT - User and Assistant in one logical section -->
+<!-- RIGHT - User and Assistant's entire response treated as one logical section -->
 
 ---
 ---
