@@ -41,8 +41,8 @@ def display_dry_run(matches: List[Tuple[Path, str]]) -> None:
     print(f"{ansi.blue}{'='*80}{ansi.reset}\n")
 
     for file_path, new_filename in matches:
-        print(f"{ansi.red}FROM:{ansi.reset} {ansi.cyan}{file_path}{ansi.reset}")
-        print(f"  {ansi.green}TO:{ansi.reset} {ansi.cyan}{file_path.parent / new_filename}{ansi.reset}")
+        print(f"FROM: {ansi.red}{file_path.name}{ansi.reset}")
+        print(f"  TO: {ansi.green}{new_filename}{ansi.reset}")
         print()
 
     print(f"\nTotal files to rename: {ansi.green}{len(matches)}{ansi.reset}")
