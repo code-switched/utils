@@ -4,7 +4,8 @@ import re
 import sys
 from pathlib import Path
 from typing import List, Tuple
-from style import ansi
+
+from utils.style import ansi
 
 
 # The regex handles two timestamp formats:
