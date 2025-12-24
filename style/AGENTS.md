@@ -3,12 +3,14 @@
 Always check for a virtual environment first. Do not assume a virtual environment is activated. Use the venv when running commands.
 
 if Unix:
+
 - `./.venv/bin/python`
 - `./.venv/bin/pip`
 - `./.venv/bin/pylint`
 - `./.venv/bin/pytest`
 
 if Windows:
+
 - `.\.venv\Scripts\python`
 - `.\.venv\Scripts\pip`
 - `.\.venv\Scripts\pylint`
@@ -29,7 +31,6 @@ Follow these rules when generating or modifying code in this repository:
 - Prioritize clarity over cleverness—code should read top-to-bottom like a story.
 
 (See below for full guidelines and examples.)
-
 
 # AGENTS: Coding Style & Control-Flow Guidelines
 
@@ -85,16 +86,16 @@ def process_item(item):
 
 Rules:
 
-* Prefer a flat, linear “happy path”.
-* Use multiple `if` guard clauses instead of a single `if/elif/else` tower when it improves clarity.
-* `else:` is not banned, but avoid it when it hides which conditions actually lead there.
+- Prefer a flat, linear “happy path”.
+- Use multiple `if` guard clauses instead of a single `if/elif/else` tower when it improves clarity.
+- `else:` is not banned, but avoid it when it hides which conditions actually lead there.
 
 ### 1.2. Keep functions small and focused
 
 If you feel tempted to add multiple `else` branches or deeply nested conditionals:
 
-* First try splitting logic into smaller functions.
-* Each function should do one clear thing and return early when preconditions fail.
+- First try splitting logic into smaller functions.
+- Each function should do one clear thing and return early when preconditions fail.
 
 ---
 
@@ -104,12 +105,12 @@ If you feel tempted to add multiple `else` branches or deeply nested conditional
 
 Do not use `except Exception:` or `except BaseException:` unless you are:
 
-* Logging/cleaning up and then re-raising.
+- Logging/cleaning up and then re-raising.
 
 Rules:
 
-* Catch only the specific exceptions you expect and know how to handle.
-* If you don't know how to recover, don’t catch. Let it propagate.
+- Catch only the specific exceptions you expect and know how to handle.
+- If you don't know how to recover, don’t catch. Let it propagate.
 
 ### 2.2. Group related exceptions explicitly
 
@@ -131,8 +132,8 @@ There are a few places where a broad catch is acceptable and sometimes required.
 
 Guidelines:
 
-* Keep the handler small (log, cleanup, exit).
-* Do not bury business logic inside such a handler.
+- Keep the handler small (log, cleanup, exit).
+- Do not bury business logic inside such a handler.
 
 ### 3.2. Custom exception hierarchies
 
@@ -212,16 +213,16 @@ def categorize(user):
 
 Both are valid Python. The first style is preferred here because:
 
-* Each condition stands alone.
-* The “fall-through” default path is visually obvious at the end.
-* You don’t need to mentally manage the full `if/elif/elif/else` ladder.
+- Each condition stands alone.
+- The “fall-through” default path is visually obvious at the end.
+- You don’t need to mentally manage the full `if/elif/elif/else` ladder.
 
 ### 5.2. When `else` *is* okay
 
 `else` is fine when:
 
-* There are only 1–2 branches and it aids readability.
-* The logic is truly binary.
+- There are only 1–2 branches and it aids readability.
+- The logic is truly binary.
 
 Example:
 
@@ -240,8 +241,8 @@ Use judgement: prefer clarity over dogma.
 
 ## 6. Error Messages and Fail-Fast Behavior
 
-* Fail early and loudly when invariants are broken.
-* Raise exceptions with messages that explain what and why, not just that something failed.
+- Fail early and loudly when invariants are broken.
+- Raise exceptions with messages that explain what and why, not just that something failed.
 
 ✅ Good:
 
@@ -258,7 +259,7 @@ def get_user(id: int) -> User:
 
 We care about linters (e.g. Pylint) and generally do not want to disable rules globally.
 
-* Do not disable warnings
+- Do not disable warnings
 
 Example:
 
