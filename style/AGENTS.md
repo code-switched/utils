@@ -16,6 +16,8 @@ if Windows:
 - `.\.venv\Scripts\pylint`
 - `.\.venv\Scripts\pytest`
 
+Run pytest before and after each turn so you know if your work broke any logic.
+
 Follow these rules when generating or modifying code in this repository:
 
 - Use guard clauses to exit early. Keep the happy path straight and flat.
