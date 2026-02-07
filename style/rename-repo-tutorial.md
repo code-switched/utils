@@ -49,8 +49,8 @@ git remote -v
 
 Example output:
 ```
-origin  git@chrischcodes.github.com:chrischcodes/nightofworship-levites.git (fetch)
-origin  git@chrischcodes.github.com:chrischcodes/nightofworship-levites.git (push)
+origin  git@username.github.com:username/nightofworship-levites.git (fetch)
+origin  git@username.github.com:username/nightofworship-levites.git (push)
 ```
 
 ### Update Remote URL
@@ -65,7 +65,7 @@ git remote set-url origin git@github.com:username/new-repo-name.git
 git remote set-url origin git@github.com:organization/new-repo-name.git
 ```
 
-**Note:** Replace `git@github.com` with your actual GitHub SSH hostname if you use a custom one (e.g., `git@chrischcodes.github.com`).
+**Note:** Replace `git@github.com` with your actual GitHub SSH hostname if you use a custom one (e.g., `git@username.github.com`).
 
 ### Verify the Update
 ```bash
@@ -74,8 +74,8 @@ git remote -v
 
 Example output after update:
 ```
-origin  git@chrischcodes.github.com:nightofworship/nowmanager.git (fetch)
-origin  git@chrischcodes.github.com:nightofworship/nowmanager.git (push)
+origin  git@username.github.com:nightofworship/nowmanager.git (fetch)
+origin  git@username.github.com:nightofworship/nowmanager.git (push)
 ```
 
 ### Test the Connection
@@ -145,7 +145,7 @@ Here's a complete example of renaming `nightofworship-levites` to `nowmanager` a
 git remote -v
 
 # Update remote URL
-git remote set-url origin git@chrischcodes.github.com:nightofworship/nowmanager.git
+git remote set-url origin git@username.github.com:nightofworship/nowmanager.git
 
 # Verify update
 git remote -v
@@ -158,7 +158,7 @@ git fetch origin
 
 # Commit and push changes
 git add pyproject.toml
-git commit -m "Rename project from nightofworship-levites to nowmanager"
+git commit -m "Rename project from hyphenated-repo to repomanager"
 git push origin main
 ```
 
