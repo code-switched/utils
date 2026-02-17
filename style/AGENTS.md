@@ -18,6 +18,8 @@ if Windows:
 
 Run pytest before and after each turn so you know if your work broke any logic.
 
+Once we come to an agreement on what code should be committed craft a commit mesage for the new code based on ./docs/dev/commits.md and commit the code, make sure the body is a hyphenated bullet list. Do not push unless asked.
+
 Follow these rules when generating or modifying code in this repository:
 
 - Use guard clauses to exit early. Keep the happy path straight and flat.
@@ -31,6 +33,7 @@ Follow these rules when generating or modifying code in this repository:
 - Keep functions focused on one responsibility with clear inputs/outputs.
 - Fail fast when invariants are violated; use precise error messages.
 - Prioritize clarity over cleverness—code should read top-to-bottom like a story.
+- For CLI tools, use `Declarative` control flow style. Do NOT use exit-code style control flow. Let the entrypoint handle process termination.
 
 (See below for full guidelines and examples.)
 
