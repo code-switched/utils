@@ -10,10 +10,11 @@ from typing import List, Tuple
 ANSI_RED, ANSI_GREEN, ANSI_YELLOW, ANSI_BLUE = '\033[31m', '\033[32m', '\033[33m', '\033[34m'
 ANSI_MAGENTA, ANSI_CYAN, ANSI_GREY, ANSI_RESET = '\033[35m', '\033[36m', '\033[90m', '\033[0m'
 
-# The regex handles two timestamp formats:
+# The regex handles three timestamp formats:
 # 1. Standard: YYYY-MM-DD-HH-MM-SS-AM|PM  (e.g., 2025-10-09-21-15-39-PM)
-# 2. Edge case: YYYY-MM-DD_-_HH-MM-SS(-AM|PM)  (e.g., 2025-05-29_-_19-29-55)
-REGEX_PR = r"(.+)-(\d{4}-\d+-\d+(?:-\d+-\d+-\d+-\w+|_-_\d+-\d+-\d+(?:-\w+)?))"
+# 2. Plain: YYYY-MM-DD-HH-MM-SS  (e.g., 2025-06-11-18-26-59)
+# 3. Edge case: YYYY-MM-DD_-_HH-MM-SS(-AM|PM)  (e.g., 2025-05-29_-_19-29-55)
+REGEX_PR = r"(.+)-(\d{4}-\d+-\d+(?:-\d+-\d+-\d+(?:-\w+)?|_-_\d+-\d+-\d+(?:-\w+)?))"
 REPLACE_WITH = r"\2-\1"
 
 
