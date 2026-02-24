@@ -5,8 +5,10 @@ import sys
 from pathlib import Path
 from typing import List, Tuple
 
-from utils.style import ansi
 
+# ANSI color escape codes
+ANSI_RED, ANSI_GREEN, ANSI_YELLOW, ANSI_BLUE = '\033[31m', '\033[32m', '\033[33m', '\033[34m'
+ANSI_MAGENTA, ANSI_CYAN, ANSI_GREY, ANSI_RESET = '\033[35m', '\033[36m', '\033[90m', '\033[0m'
 
 # The regex handles two timestamp formats:
 # 1. Standard: YYYY-MM-DD-HH-MM-SS-AM|PM  (e.g., 2025-10-09-21-15-39-PM)
@@ -36,23 +38,23 @@ def find_matching_files(root_dir: Path) -> List[Tuple[Path, str]]:
 
 def display_dry_run(matches: List[Tuple[Path, str]]) -> None:
     """Display the dry run showing what would be renamed."""
-    print("\n" + f"{ansi.blue}{'='*80}{ansi.reset}")
-    print(f"{ansi.yellow}DRY RUN{ansi.reset} - Files that would be renamed:")
-    print(f"{ansi.blue}{'='*80}{ansi.reset}\n")
+    print("\n" + f"{ANSI_BLUE}{'='*80}{ANSI_RESET}")
+    print(f"{ANSI_YELLOW}DRY RUN{ANSI_RESET} - Files that would be renamed:")
+    print(f"{ANSI_BLUE}{'='*80}{ANSI_RESET}\n")
 
     for file_path, new_filename in matches:
-        print(f"FROM: {ansi.red}{file_path.name}{ansi.reset}")
-        print(f"  TO: {ansi.green}{new_filename}{ansi.reset}")
+        print(f"FROM: {ANSI_RED}{file_path.name}{ANSI_RESET}")
+        print(f"  TO: {ANSI_GREEN}{new_filename}{ANSI_RESET}")
         print()
 
-    print(f"\nTotal files to rename: {ansi.green}{len(matches)}{ansi.reset}")
+    print(f"\nTotal files to rename: {ANSI_GREEN}{len(matches)}{ANSI_RESET}")
 
 
 def rename_files(matches: List[Tuple[Path, str]]) -> None:
     """Actually rename the files."""
-    print("\n" + f"{ansi.blue}{'='*80}{ansi.reset}")
-    print(f"{ansi.magenta}Renaming files...{ansi.reset}")
-    print(f"{ansi.blue}{'='*80}{ansi.reset}\n")
+    print("\n" + f"{ANSI_BLUE}{'='*80}{ANSI_RESET}")
+    print(f"{ANSI_MAGENTA}Renaming files...{ANSI_RESET}")
+    print(f"{ANSI_BLUE}{'='*80}{ANSI_RESET}\n")
 
     success_count = 0
     error_count = 0
@@ -61,34 +63,41 @@ def rename_files(matches: List[Tuple[Path, str]]) -> None:
         try:
             new_path = file_path.parent / new_filename
             file_path.rename(new_path)
-            print(f"{ansi.green}✓{ansi.reset} {ansi.cyan}{file_path.name}{ansi.reset}")
+            print(f"{ANSI_GREEN}✓{ANSI_RESET} {ANSI_CYAN}{file_path.name}{ANSI_RESET}")
             success_count += 1
         except OSError as e:
-            print(f"{ansi.red}✗{ansi.reset} Error renaming {ansi.yellow}{file_path.name}{ansi.reset}: {ansi.red}{e}{ansi.reset}")
+            name_part = f"{ANSI_YELLOW}{file_path.name}{ANSI_RESET}"
+            err_part = f"{ANSI_RED}{e}{ANSI_RESET}"
+            err_msg = f"Error renaming {name_part}: {err_part}"
+            print(f"{ANSI_RED}✗{ANSI_RESET} {err_msg}")
             error_count += 1
 
-    print("\n" + f"{ansi.blue}{'='*80}{ansi.reset}")
-    print(f"Summary: {ansi.green}{success_count}{ansi.reset} renamed, {ansi.red}{error_count}{ansi.reset} errors")
-    print(f"{ansi.blue}{'='*80}{ansi.reset}")
+    print("\n" + f"{ANSI_BLUE}{'='*80}{ANSI_RESET}")
+    renamed_str = f"{ANSI_GREEN}{success_count}{ANSI_RESET} renamed"
+    errors_str = f"{ANSI_RED}{error_count}{ANSI_RESET} errors"
+    print(f"Summary: {renamed_str}, {errors_str}")
+    print(f"{ANSI_BLUE}{'='*80}{ANSI_RESET}")
 
 
 def main():
     """Main entry point."""
     if len(sys.argv) < 2:
-        print(f"Usage: python {ansi.cyan}rename_timestamp_files.py{ansi.reset} <directory_path>")
+        print(f"Usage: python {ANSI_CYAN}rename_timestamp_files.py{ANSI_RESET} <directory_path>")
         sys.exit(1)
 
     root_dir = Path(sys.argv[1])
 
     if not root_dir.exists():
-        print(f"{ansi.red}Error:{ansi.reset} Directory {ansi.yellow}'{root_dir}'{ansi.reset} does not exist")
+        err_msg = f"Directory {ANSI_YELLOW}'{root_dir}'{ANSI_RESET} does not exist"
+        print(f"{ANSI_RED}Error:{ANSI_RESET} {err_msg}")
         sys.exit(1)
 
     if not root_dir.is_dir():
-        print(f"{ansi.red}Error:{ansi.reset} {ansi.yellow}'{root_dir}'{ansi.reset} is not a directory")
+        err_msg = f"{ANSI_YELLOW}'{root_dir}'{ANSI_RESET} is not a directory"
+        print(f"{ANSI_RED}Error:{ANSI_RESET} {err_msg}")
         sys.exit(1)
 
-    print(f"Searching in: {ansi.cyan}{root_dir.resolve()}{ansi.reset}")
+    print(f"Searching in: {ANSI_CYAN}{root_dir.resolve()}{ANSI_RESET}")
     matches = find_matching_files(root_dir)
 
     if not matches:
@@ -97,12 +106,13 @@ def main():
 
     display_dry_run(matches)
 
-    response = input(f"\nProceed with renaming? [{ansi.green}yes{ansi.reset}/{ansi.red}no{ansi.reset}]: ").strip().lower()
+    prompt = f"\nProceed with renaming? [{ANSI_GREEN}yes{ANSI_RESET}/{ANSI_RED}no{ANSI_RESET}]: "
+    response = input(prompt).strip().lower()
 
     if response in ('yes', 'y'):
         rename_files(matches)
     else:
-        print(f"\nRenaming {ansi.yellow}cancelled{ansi.reset}.")
+        print(f"\nRenaming {ANSI_YELLOW}cancelled{ANSI_RESET}.")
 
 
 if __name__ == "__main__":
