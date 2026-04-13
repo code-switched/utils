@@ -10,12 +10,21 @@ from typing import List, Tuple
 ANSI_RED, ANSI_GREEN, ANSI_YELLOW, ANSI_BLUE = '\033[31m', '\033[32m', '\033[33m', '\033[34m'
 ANSI_MAGENTA, ANSI_CYAN, ANSI_GREY, ANSI_RESET = '\033[35m', '\033[36m', '\033[90m', '\033[0m'
 
-# The regex handles three timestamp formats:
+# The regex handles three legacy timestamp formats:
 # 1. Standard: YYYY-MM-DD-HH-MM-SS-AM|PM  (e.g., 2025-10-09-21-15-39-PM)
 # 2. Plain: YYYY-MM-DD-HH-MM-SS  (e.g., 2025-06-11-18-26-59)
 # 3. Edge case: YYYY-MM-DD_-_HH-MM-SS(-AM|PM)  (e.g., 2025-05-29_-_19-29-55)
+# All formats are normalized to the new standard: YYYY-MM-DD-HH-MM-SS (all dashes, no AM/PM)
+
 REGEX_PR = r"(.+)-(\d{4}-\d+-\d+(?:-\d+-\d+-\d+(?:-\w+)?|_-_\d+-\d+-\d+(?:-\w+)?))"
-REPLACE_WITH = r"\2-\1"
+
+
+def _build_new_filename(match: re.Match) -> str:
+    description = match.group(1)
+    timestamp = match.group(2)
+    timestamp = timestamp.replace('_-_', '-')
+    timestamp = re.sub(r'-(?:AM|PM)$', '', timestamp, flags=re.IGNORECASE)
+    return f"{timestamp}-{description}"
 
 
 def find_matching_files(root_dir: Path) -> List[Tuple[Path, str]]:
@@ -28,7 +37,7 @@ def find_matching_files(root_dir: Path) -> List[Tuple[Path, str]]:
     for file_path in root_dir.rglob("*"):
         if file_path.is_file():
             filename = file_path.name
-            new_filename = re.sub(REGEX_PR, REPLACE_WITH, filename)
+            new_filename = re.sub(REGEX_PR, _build_new_filename, filename)
 
             # Only include files that would actually be renamed
             if new_filename != filename:
